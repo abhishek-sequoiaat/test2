@@ -1,21 +1,10 @@
-from fastapi import FastAPI, Depends, HTTPException
-import psycopg2
-from psycopg2.extras import RealDictCursor
-import os
-from dotenv import load_dotenv
-load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL")
+from fastapi import APIRouter, HTTPException
+from app.database import get_db_connection
+
+router = APIRouter()
 
 
-def get_db_connection():
-    conn = psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
-    return conn
-
-
-app = FastAPI()
-
-
-@app.post("/users/")
+@router.post("/users/")
 def create_user(name: str, email: str):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -24,10 +13,11 @@ def create_user(name: str, email: str):
     conn.commit()
     cursor.close()
     conn.close()
+
     return user
 
 
-@app.get("/users/")
+@router.get("/users/")
 def get_users():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -38,7 +28,7 @@ def get_users():
     return users
 
 
-@app.get("/users/{user_id}")
+@router.get("/users/{user_id}")
 def get_user(user_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -51,7 +41,7 @@ def get_user(user_id: int):
     return user
 
 
-@app.put("/users/{user_id}")
+@router.put("/users/{user_id}")
 def update_user(user_id: int, name: str, email: str):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -65,7 +55,7 @@ def update_user(user_id: int, name: str, email: str):
     return user
 
 
-@app.delete("/users/{user_id}")
+@router.delete("/users/{user_id}")
 def delete_user(user_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
