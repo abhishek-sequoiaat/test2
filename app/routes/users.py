@@ -67,3 +67,5 @@ def delete_user(user_id: int):
     if not deleted_user:
         raise HTTPException(status_code=404, detail="User not found")
     return {"message": "User deleted successfully"}
+
+# Creating new branch to add some feature branch name some-feature
