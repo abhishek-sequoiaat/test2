@@ -7,3 +7,4 @@ def get_db_connection():
     return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
 
 # Added some feature
+# second change
